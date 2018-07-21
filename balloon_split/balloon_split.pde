@@ -9,14 +9,14 @@ PImage bg, show, cur;
 Balloon[] bals;
 
 void setup(){
-  size(480, 720);
-  camera = new Capture(this, width, height/2, 12);
+  size(480, 360);
+  camera = new Capture(this, width, height, 12);
   camera.start();
   
   //bg2 = new int[width*height/2];
-  bg = createImage(width, height/2, ARGB);
-  show = createImage(width, height/2, ARGB);
-  cur = createImage(width, height/2, ARGB);
+  bg = createImage(width, height, ARGB);
+  show = createImage(width, height, ARGB);
+  cur = createImage(width, height, ARGB);
   
   bals = new Balloon[NUM_BAL];
   for (int i=0; i<NUM_BAL; i++) {
@@ -34,7 +34,7 @@ void draw() {
   
   image(camera, -width, 0);
   //show.copy(camera, 0, 0, width, height/2, 0, 0, width, height/2);
-  cur = get(0, 0, width, height/2);
+  cur = get(0, 0, width, height);
   show.copy(cur, 0, 0, cur.width, cur.height, 0, 0, show.width, show.height); 
   
   
@@ -76,7 +76,7 @@ void draw() {
   
   // draw background (camera)
   image(show, 0, 0);
-  if (bg != null) image(bg, 0, height/2);
+  //if (bg != null) image(bg, 0, height/2);
   //if (bg2 != null) image(bg2, 0, height/2);
   
   

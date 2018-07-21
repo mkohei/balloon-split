@@ -27,7 +27,9 @@ class Balloon {
     if (cnt<0) cnt++;
     if (cnt<=0) {
       //ellipse(this.x, this.y, this.rx, this.ry);
-      float _rx = (1-((float)cnt/(float)START_CNT)) * this.rx;
+      float ratio = ((float)cnt/(float)START_CNT);
+      float _rx = (1-ratio) * this.rx;
+      fill(red(this.c), green(this.c), blue(this.c), 100*(1-ratio));
       ellipse(this.x, this.y, _rx, _rx);
     } else if (cnt <= GOAL_CNT) {
       float da = PI / 10;

@@ -44,8 +44,12 @@ class Balloon {
     }
   }
   
-  void trig() {
-    if (cnt==0) cnt = 1;
+  boolean trig() {
+    if (cnt==0) {
+      cnt = 1;
+      return true;
+    }
+    return false;
   }
   
   boolean isIn(float x, float y) {

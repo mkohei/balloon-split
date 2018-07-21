@@ -1,9 +1,13 @@
 import processing.video.*;
+import ddf.minim.*;
 
 final int NUM_BAL = 20;
 final int RESAMP = 5;
 
 Capture camera;
+Minim minim;
+AudioSample split;
+
 PImage bg, show, cur;
 
 Balloon[] bals;
@@ -20,8 +24,13 @@ void setup(){
   
   bals = new Balloon[NUM_BAL];
   for (int i=0; i<NUM_BAL; i++) {
-    bals[i] = new Balloon( random(width), random(height/2), 100, 100, color( random(100,255), random(100,255), random(100,255), 150));
+    bals[i] = new Balloon( random(width), random(height), 100, 100, color( random(100,255), random(100,255), random(100,255), 150));
   }
+  
+  // sound
+  minim = new Minim(this);
+  //split = minim.loadSample("src/bs.mp3", 2048);
+  split = minim.loadSample("src/bs2.mp3", 2048);
 }
 
 
@@ -42,7 +51,7 @@ void draw() {
   
   if (bg != null) {
     float a1, a2, a3, b1, b2, b3, la, lb;
-    for (int y=0; y<height/2; y++) {
+    for (int y=0; y<height; y++) {
       for (int x=0; x<width; x++) {
         int idx = y*width + x;
         a1 = red(cur.pixels[idx])-127;
@@ -67,7 +76,9 @@ void draw() {
           show.pixels[idx] = color(0, 0, 255);
           
           for (int i=0; i<NUM_BAL; i++) {
-            if (bals[i].isIn(x,y) == true) bals[i].trig();
+            if (bals[i].isIn(x,y) == true) 
+              if (bals[i].trig())
+                split.trigger();
           }
         }
       }
@@ -83,7 +94,7 @@ void draw() {
   // draw balloon & update
   for (int i=0; i<NUM_BAL; i++) {
     if (bals[i].dead() == true)
-      bals[i] = new Balloon( random(width), random(height/2), 100, 100, color( random(100,255), random(100,255), random(100,255), 150));
+      bals[i] = new Balloon( random(width), random(height), 100, 100, color( random(100,255), random(100,255), random(100,255), 150));
     bals[i].draw();
   }
   
@@ -93,16 +104,20 @@ void draw() {
   bg.copy(cur, 0, 0, cur.width, cur.height, 0, 0, bg.width, bg.height);
 }
 
-/*
+
 void keyPressed() {
   if (key==' ') {
-    //bg = get(0, 0, width, height/2);
-    bg = createImage(width, height/2, ARGB);
-    bg.copy(cur, 0, 0, cur.width, cur.height, 0, 0, bg.width, bg.height);
-    //bg2 = camera.pixels; 
+    //split.trigger();
   }
 }
-*/
+
+void stop() {
+  //
+  split.close();
+  minim.stop();
+  super.stop();
+}
+
   
 
 
